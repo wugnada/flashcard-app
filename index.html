@@ -3,8 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>플래시 카드</title>
+    <title>텍스트 연습 - 안드로이드</title>
     
+    <!-- PWA 설정 -->
+    <meta name="theme-color" content="#000000">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="텍스트연습">
+    <meta name="description" content="안드로이드용 텍스트 연습 앱">
+    
+    <!-- 안드로이드 전용 아이콘 -->
+    <link rel="icon" sizes="192x192" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23000'/><text x='96' y='110' text-anchor='middle' fill='%2390EE90' font-size='80'>📝</text></svg>">
+    <link rel="icon" sizes="512x512" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23000'/><text x='256' y='300' text-anchor='middle' fill='%2390EE90' font-size='200'>📝</text></svg>">
+    
+    <!-- 매니페스트 -->
+    <link rel="manifest" href="manifest.json">
+
     <style>
         * {
             margin: 0;
@@ -13,201 +26,818 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', 'Noto Sans KR', sans-serif;
-            background-color: #000;
-            color: #90EE90;
-            height: 100vh;
+        html, body {
+            height: 100%;
             overflow: hidden;
-            display: flex;
             position: fixed;
             width: 100%;
-            top: 0;
-            left: 0;
-            -webkit-font-smoothing: antialiased;
         }
 
-        .main-container {
-            display: flex;
-            width: 100%;
-            height: 100vh;
-        }
-
-        .editor-container {
-            width: 90%;
-            padding: 20px;
+        body {
+            font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #000 0%, #111 100%);
+            color: #90EE90;
             display: flex;
             flex-direction: column;
+            touch-action: manipulation;
         }
 
-        .reset-container {
-            width: 10%;
-            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
-            border-left: 1px solid #333;
+        .app-container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .status-bar {
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            padding: 0.75rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #333;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .status-left {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+        }
+
+        .app-title {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #90EE90;
+        }
+
+        .usage-info {
+            font-size: 0.75rem;
+            color: #FFD700;
+        }
+
+        .status-right {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .typing-status {
+            font-size: 1.2rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .typing-status.active {
+            opacity: 1;
+        }
+
+        .menu-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #333;
+            border: none;
+            color: #90EE90;
+            font-size: 1.2rem;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s ease;
         }
 
-        .reset-container:hover {
-            background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
-            box-shadow: inset 0 6px 30px rgba(0, 0, 0, 0.5);
+        .menu-btn:active {
+            background: #555;
+            transform: scale(0.9);
         }
 
-        .reset-container:active {
-            background: linear-gradient(135deg, #333, #444);
-            transform: scale(0.98);
+        .editor-container {
+            flex: 1;
+            position: relative;
+            overflow: hidden;
         }
 
         .text-editor {
             width: 100%;
             height: 100%;
             background: transparent;
-            border: 2px solid #333;
-            border-radius: 10px;
-            padding: 20px;
             color: #90EE90;
-            font-size: 20px;
-            font-family: inherit;
-            resize: none;
+            border: none;
             outline: none;
-            transition: all 0.3s ease;
-        }
-
-        .text-editor:focus {
-            border-color: #90EE90;
-            box-shadow: 0 0 20px rgba(144, 238, 144, 0.3);
+            font-family: 'JetBrains Mono', 'Roboto Mono', monospace;
+            font-size: 1.1rem;
+            padding: 1rem;
+            resize: none;
+            line-height: 1.6;
+            text-align: center;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         .text-editor::placeholder {
             color: #555;
+            text-align: center;
         }
 
-        .reset-icon {
-            font-size: 36px;
+        .floating-actions {
+            position: fixed;
+            bottom: 2rem;
+            right: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            z-index: 200;
+        }
+
+        .fab {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            border: none;
+            color: white;
+            font-size: 1.4rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .fab:active {
+            transform: scale(0.9);
+        }
+
+        .fab.primary {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+        }
+
+        .fab.danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+        }
+
+        .fab.secondary {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 1rem;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal {
+            background: linear-gradient(135deg, #111 0%, #000 100%);
+            border: 2px solid #333;
+            border-radius: 16px;
+            padding: 1.5rem;
+            width: 100%;
+            max-width: 350px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.8);
+            transform: scale(0.9);
+            transition: transform 0.2s ease;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .modal-title {
             color: #90EE90;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-            user-select: none;
-            pointer-events: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        /* 모바일 최적화 */
-        @media (max-width: 768px) {
-            .editor-container {
-                padding: 15px;
-            }
-            
-            .text-editor {
-                padding: 15px;
-                font-size: 18px;
-            }
-            
-            .reset-icon {
-                font-size: 30px;
-            }
+        .modal-subtitle {
+            color: #FFD700;
+            font-size: 0.85rem;
         }
 
-        @media (max-width: 480px) {
-            .text-editor {
-                font-size: 16px;
-                padding: 12px;
-            }
-            
-            .reset-icon {
-                font-size: 24px;
-            }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
         }
 
-        /* 세로 모드일 때 */
-        @media (orientation: portrait) and (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-            
-            .editor-container {
-                width: 100%;
-                height: 90%;
-            }
-            
-            .reset-container {
-                width: 100%;
-                height: 10%;
-                border-left: none;
-                border-top: 1px solid #333;
-            }
+        .settings-item {
+            background: #222;
+            border: 2px solid #444;
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            color: #90EE90;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            font-weight: 500;
         }
 
-        /* 다크 모드 스크롤바 */
-        ::-webkit-scrollbar {
-            width: 8px;
+        .settings-item:active {
+            transform: scale(0.95);
         }
 
-        ::-webkit-scrollbar-track {
-            background: #111;
+        .settings-item.active {
+            background: #90EE90;
+            color: #000;
+            border-color: #90EE90;
         }
 
-        ::-webkit-scrollbar-thumb {
+        .modal-actions {
+            display: flex;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid #444;
+            border-radius: 8px;
             background: #333;
-            border-radius: 4px;
+            color: #90EE90;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.2s ease;
         }
 
-        ::-webkit-scrollbar-thumb:hover {
+        .modal-btn:active {
+            transform: scale(0.95);
+        }
+
+        .modal-btn.primary {
+            background: #90EE90;
+            color: #000;
+            border-color: #90EE90;
+        }
+
+        .install-prompt {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #333 0%, #222 100%);
+            padding: 1rem;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 2px solid #444;
+            z-index: 300;
+        }
+
+        .install-text {
+            color: #90EE90;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .install-btn {
+            background: #90EE90;
+            color: #000;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auto-clear-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 107, 107, 0.9);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 25px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 500;
+            backdrop-filter: blur(10px);
+        }
+
+        .auto-clear-indicator.show {
+            opacity: 1;
+        }
+
+        /* 안드로이드 전용 최적화 */
+        @media (max-height: 600px) {
+            .text-editor {
+                font-size: 1rem;
+                padding: 0.75rem;
+            }
+            
+            .floating-actions {
+                bottom: 1rem;
+            }
+        }
+
+        /* 진동 피드백 애니메이션 */
+        .vibrate {
+            animation: vibrate 0.3s ease-in-out;
+        }
+
+        @keyframes vibrate {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-2px); }
+            75% { transform: translateX(2px); }
+        }
+
+        /* 스크롤바 스타일 */
+        .text-editor::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .text-editor::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .text-editor::-webkit-scrollbar-thumb {
             background: #444;
-        }
-
-        /* 선택 영역 스타일 */
-        ::selection {
-            background: rgba(144, 238, 144, 0.3);
+            border-radius: 3px;
         }
     </style>
 </head>
-
 <body>
-    <div class="main-container">
-        <!-- 텍스트 에디터 영역 (90%) -->
+    <div class="app-container">
+        <!-- 상태바 -->
+        <div class="status-bar">
+            <div class="status-left">
+                <div class="app-title">📝 텍스트 연습</div>
+                <div class="usage-info" id="usageInfo">0초 사용 중</div>
+            </div>
+            <div class="status-right">
+                <div class="typing-status" id="typingStatus">⌨️</div>
+                <button class="menu-btn" onclick="showMenu()">⋮</button>
+            </div>
+        </div>
+
+        <!-- 에디터 -->
         <div class="editor-container">
             <textarea 
                 class="text-editor" 
                 id="textEditor" 
-                placeholder="여기에 텍스트를 입력하세요..."
+                placeholder="안드로이드에서 텍스트 연습을 시작하세요...&#10;&#10;5초간 타이핑을 멈추면 자동으로 초기화됩니다"
                 spellcheck="false"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
             ></textarea>
         </div>
 
-        <!-- 초기화 버튼 영역 (10%) -->
-        <div class="reset-container" onclick="resetText()" title="초기화">
-            <div class="reset-icon">🗑️</div>
+        <!-- 플로팅 액션 버튼 -->
+        <div class="floating-actions">
+            <button class="fab danger" onclick="clearText()" title="초기화">🗑️</button>
+            <button class="fab secondary" onclick="copyText()" title="복사">📋</button>
+        </div>
+    </div>
+
+    <!-- 자동 초기화 알림 -->
+    <div class="auto-clear-indicator" id="autoClearIndicator">5초 후 자동 초기화</div>
+
+    <!-- PWA 설치 프롬프트 -->
+    <div class="install-prompt" id="installPrompt">
+        <div class="install-text">📱 홈 화면에 앱으로 추가하기</div>
+        <button class="install-btn" onclick="installApp()">추가</button>
+    </div>
+
+    <!-- 메뉴 모달 -->
+    <div class="modal-overlay" id="menuModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">📋 메뉴</div>
+            </div>
+            
+            <div class="settings-grid">
+                <div class="settings-item" onclick="showSettings()">⚙️ 설정</div>
+                <div class="settings-item" onclick="clearText(); closeMenu();">🗑️ 초기화</div>
+                <div class="settings-item" onclick="copyText(); closeMenu();">📋 복사</div>
+                <div class="settings-item" onclick="shareApp(); closeMenu();">📤 공유</div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="resetStats()">통계 초기화</button>
+                <button class="modal-btn primary" onclick="closeMenu()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 설정 모달 -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">⚙️ 설정</div>
+            </div>
+            
+            <div class="modal-subtitle">폰트 크기</div>
+            <div class="settings-grid">
+                <div class="settings-item" onclick="setFontSize(16)">작게</div>
+                <div class="settings-item" onclick="setFontSize(18)">보통</div>
+                <div class="settings-item" onclick="setFontSize(22)">크게</div>
+                <div class="settings-item" onclick="setFontSize(26)">매우 크게</div>
+            </div>
+
+            <div class="modal-subtitle">자동 초기화</div>
+            <div class="settings-grid">
+                <div class="settings-item" onclick="setAutoClearTime(0)">끄기</div>
+                <div class="settings-item" onclick="setAutoClearTime(3)">3초</div>
+                <div class="settings-item" onclick="setAutoClearTime(5)">5초</div>
+                <div class="settings-item" onclick="setAutoClearTime(10)">10초</div>
+            </div>
+
+            <div class="modal-actions">
+                <button class="modal-btn" onclick="closeSettings()">취소</button>
+                <button class="modal-btn primary" onclick="closeSettings()">확인</button>
+            </div>
         </div>
     </div>
 
     <script>
-        const textEditor = document.getElementById('textEditor');
+        // PWA 서비스 워커 등록
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('서비스 워커 등록 성공'))
+                .catch(err => console.log('서비스 워커 등록 실패'));
+        }
 
-        // 텍스트 초기화
-        function resetText() {
-            textEditor.value = '';
-            textEditor.focus();
+        // 앱 설정
+        let appSettings = {
+            fontSize: 18,
+            autoClearTime: 5,
+            totalUsageTime: 0,
+            currentSessionTime: 0,
+            lastActiveDate: new Date().toDateString()
+        };
+
+        let isTyping = false;
+        let lastKeyTime = 0;
+        let sessionTimer = null;
+        let autoClearTimer = null;
+        let deferredPrompt = null;
+
+        // DOM 요소
+        const textEditor = document.getElementById('textEditor');
+        const usageInfo = document.getElementById('usageInfo');
+        const typingStatus = document.getElementById('typingStatus');
+        const autoClearIndicator = document.getElementById('autoClearIndicator');
+        const installPrompt = document.getElementById('installPrompt');
+
+        // 앱 초기화
+        function initApp() {
+            loadSettings();
+            updateUI();
+            bindEvents();
+            startSessionTimer();
             
-            // 간단한 진동 피드백 (지원되는 경우)
-            if (navigator.vibrate) {
-                navigator.vibrate(50);
+            // PWA 설치 프롬프트 처리
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                showInstallPrompt();
+            });
+
+            // 안드로이드 뒤로가기 버튼 처리
+            window.addEventListener('popstate', handleBackButton);
+            
+            setTimeout(() => textEditor.focus(), 100);
+        }
+
+        // 설정 로드
+        function loadSettings() {
+            try {
+                const saved = localStorage.getItem('androidTextEditorSettings');
+                if (saved) {
+                    const parsed = JSON.parse(saved);
+                    appSettings = { ...appSettings, ...parsed };
+                }
+                
+                // 새로운 날이면 세션 시간 초기화
+                const today = new Date().toDateString();
+                if (appSettings.lastActiveDate !== today) {
+                    appSettings.currentSessionTime = 0;
+                    appSettings.lastActiveDate = today;
+                    saveSettings();
+                }
+            } catch (e) {
+                console.log('설정 로드 실패');
             }
         }
 
-        // 페이지 로드 시 에디터에 포커스
-        document.addEventListener('DOMContentLoaded', () => {
+        // 설정 저장
+        function saveSettings() {
+            try {
+                localStorage.setItem('androidTextEditorSettings', JSON.stringify(appSettings));
+            } catch (e) {
+                console.log('설정 저장 실패');
+            }
+        }
+
+        // UI 업데이트
+        function updateUI() {
+            textEditor.style.fontSize = appSettings.fontSize + 'px';
+            updateUsageDisplay();
+            updateAutoClearPlaceholder();
+        }
+
+        // 사용 시간 표시 업데이트
+        function updateUsageDisplay() {
+            const totalTime = appSettings.totalUsageTime + appSettings.currentSessionTime;
+            usageInfo.textContent = `${formatTime(totalTime)} 사용 중`;
+            typingStatus.classList.toggle('active', isTyping);
+        }
+
+        // 자동 초기화 플레이스홀더 업데이트
+        function updateAutoClearPlaceholder() {
+            const baseText = "안드로이드에서 텍스트 연습을 시작하세요...";
+            if (appSettings.autoClearTime > 0) {
+                textEditor.placeholder = `${baseText}\n\n${appSettings.autoClearTime}초간 타이핑을 멈추면 자동으로 초기화됩니다`;
+            } else {
+                textEditor.placeholder = baseText + "\n\n자동 초기화가 해제되었습니다";
+            }
+        }
+
+        // 시간 포맷팅
+        function formatTime(seconds) {
+            if (seconds < 60) return `${seconds}초`;
+            if (seconds < 3600) {
+                const min = Math.floor(seconds / 60);
+                const sec = seconds % 60;
+                return sec === 0 ? `${min}분` : `${min}분 ${sec}초`;
+            }
+            const hour = Math.floor(seconds / 3600);
+            const min = Math.floor((seconds % 3600) / 60);
+            return min === 0 ? `${hour}시간` : `${hour}시간 ${min}분`;
+        }
+
+        // 이벤트 바인딩
+        function bindEvents() {
+            textEditor.addEventListener('input', onTextInput);
+            textEditor.addEventListener('focus', onEditorFocus);
+            textEditor.addEventListener('blur', onEditorBlur);
+            
+            // 모달 배경 클릭 시 닫기
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.classList.remove('show');
+                        setTimeout(() => modal.style.display = 'none', 200);
+                    }
+                });
+            });
+        }
+
+        // 텍스트 입력 처리
+        function onTextInput() {
+            startTyping();
+            resetAutoClearTimer();
+        }
+
+        // 에디터 포커스
+        function onEditorFocus() {
+            resetAutoClearTimer();
+        }
+
+        // 에디터 포커스 잃음
+        function onEditorBlur() {
+            stopTyping();
+            startAutoClearTimer();
+        }
+
+        // 타이핑 시작
+        function startTyping() {
+            if (!isTyping) {
+                isTyping = true;
+                updateUsageDisplay();
+                hapticFeedback(10); // 가벼운 진동
+            }
+            lastKeyTime = Date.now();
+        }
+
+        // 타이핑 중단
+        function stopTyping() {
+            if (isTyping) {
+                isTyping = false;
+                updateUsageDisplay();
+                startAutoClearTimer();
+            }
+        }
+
+        // 자동 초기화 타이머 시작
+        function startAutoClearTimer() {
+            if (appSettings.autoClearTime > 0 && textEditor.value.trim()) {
+                autoClearTimer = setTimeout(() => {
+                    clearText();
+                    showAutoClearIndicator();
+                }, appSettings.autoClearTime * 1000);
+            }
+        }
+
+        // 자동 초기화 타이머 리셋
+        function resetAutoClearTimer() {
+            if (autoClearTimer) {
+                clearTimeout(autoClearTimer);
+                autoClearTimer = null;
+            }
+        }
+
+        // 자동 초기화 알림 표시
+        function showAutoClearIndicator() {
+            autoClearIndicator.textContent = `${appSettings.autoClearTime}초 후 자동 초기화됨`;
+            autoClearIndicator.classList.add('show');
+            setTimeout(() => autoClearIndicator.classList.remove('show'), 2000);
+        }
+
+        // 세션 타이머
+        function startSessionTimer() {
+            sessionTimer = setInterval(() => {
+                if (isTyping) {
+                    appSettings.currentSessionTime++;
+                    updateUsageDisplay();
+                    saveSettings();
+                }
+
+                // 1초 이상 입력이 없으면 타이핑 상태 해제
+                if (isTyping && Date.now() - lastKeyTime > 1000) {
+                    stopTyping();
+                }
+            }, 1000);
+        }
+
+        // 햅틱 피드백
+        function hapticFeedback(duration = 50) {
+            if (navigator.vibrate) {
+                navigator.vibrate(duration);
+            }
+        }
+
+        // 텍스트 초기화
+        function clearText() {
+            textEditor.value = '';
             textEditor.focus();
+            stopTyping();
+            resetAutoClearTimer();
+            hapticFeedback(100);
+            
+            // 시각적 피드백
+            textEditor.classList.add('vibrate');
+            setTimeout(() => textEditor.classList.remove('vibrate'), 300);
+        }
+
+        // 텍스트 복사
+        async function copyText() {
+            if (!textEditor.value.trim()) {
+                hapticFeedback([50, 50, 50]); // 에러 진동
+                return;
+            }
+            
+            try {
+                await navigator.clipboard.writeText(textEditor.value);
+                hapticFeedback(50);
+                
+                // 성공 피드백
+                const fab = document.querySelector('.fab.secondary');
+                fab.style.background = 'linear-gradient(135deg, #4CAF50 0%, #45a049 100%)';
+                setTimeout(() => {
+                    fab.style.background = 'linear-gradient(135deg, #2196F3 0%, #1976D2 100%)';
+                }, 500);
+            } catch (e) {
+                hapticFeedback([50, 50, 50]);
+            }
+        }
+
+        // 앱 공유
+        async function shareApp() {
+            if (navigator.share) {
+                try {
+                    await navigator.share({
+                        title: '텍스트 연습 앱',
+                        text: '안드로이드용 텍스트 연습 앱을 사용해보세요!',
+                        url: window.location.href
+                    });
+                } catch (e) {
+                    console.log('공유 실패');
+                }
+            } else {
+                // 공유 API가 없으면 URL 복사
+                try {
+                    await navigator.clipboard.writeText(window.location.href);
+                    hapticFeedback(50);
+                } catch (e) {
+                    console.log('URL 복사 실패');
+                }
+            }
+        }
+
+        // 설정 함수들
+        function setFontSize(size) {
+            appSettings.fontSize = size;
+            updateUI();
+            saveSettings();
+            hapticFeedback(30);
+        }
+
+        function setAutoClearTime(seconds) {
+            appSettings.autoClearTime = seconds;
+            updateUI();
+            saveSettings();
+            resetAutoClearTimer();
+            hapticFeedback(30);
+        }
+
+        function resetStats() {
+            appSettings.totalUsageTime = 0;
+            appSettings.currentSessionTime = 0;
+            updateUsageDisplay();
+            saveSettings();
+            hapticFeedback(100);
+            closeMenu();
+        }
+
+        // 모달 관리
+        function showMenu() {
+            document.getElementById('menuModal').style.display = 'flex';
+            setTimeout(() => document.getElementById('menuModal').classList.add('show'), 10);
+        }
+
+        function closeMenu() {
+            const modal = document.getElementById('menuModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
+
+        function showSettings() {
+            closeMenu();
+            setTimeout(() => {
+                document.getElementById('settingsModal').style.display = 'flex';
+                setTimeout(() => document.getElementById('settingsModal').classList.add('show'), 10);
+            }, 200);
+        }
+
+        function closeSettings() {
+            const modal = document.getElementById('settingsModal');
+            modal.classList.remove('show');
+            setTimeout(() => modal.style.display = 'none', 200);
+        }
+
+        // PWA 설치
+        function showInstallPrompt() {
+            setTimeout(() => {
+                installPrompt.style.display = 'flex';
+            }, 3000); // 3초 후 표시
+        }
+
+        async function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                const { outcome } = await deferredPrompt.userChoice;
+                if (outcome === 'accepted') {
+                    installPrompt.style.display = 'none';
+                }
+                deferredPrompt = null;
+            }
+        }
+
+        // 뒤로가기 버튼 처리
+        function handleBackButton(e) {
+            const activeModal = document.querySelector('.modal-overlay.show');
+            if (activeModal) {
+                e.preventDefault();
+                activeModal.classList.remove('show');
+                setTimeout(() => activeModal.style.display = 'none', 200);
+                return false;
+            }
+        }
+
+        // 페이지 언로드 시 총 시간 저장
+        window.addEventListener('beforeunload', () => {
+            appSettings.totalUsageTime += appSettings.currentSessionTime;
+            appSettings.currentSessionTime = 0;
+            saveSettings();
         });
 
-        // ESC 키로 초기화
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                resetText();
-            }
-        });
+        // 앱 초기화 실행
+        initApp();
     </script>
 </body>
 </html>
