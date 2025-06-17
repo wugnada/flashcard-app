@@ -3,23 +3,211 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>플래시 카드 에디터</title>
-
-    <!-- PWA 메타 태그 -->
-    <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="플래시 카드">
-
-    <!-- PWA 매니페스트 -->
-    <link rel="manifest" href="manifest.json">
-
+    <title>플래시 카드</title>
     
-  <link rel="stylesheet" href="style.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', 'Noto Sans KR', sans-serif;
+            background-color: #000;
+            color: #90EE90;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .main-container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .editor-container {
+            width: 90%;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .reset-container {
+            width: 10%;
+            background: linear-gradient(135deg, #1a1a1a, #2a2a2a);
+            border-left: 1px solid #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .reset-container:hover {
+            background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+            box-shadow: inset 0 6px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .reset-container:active {
+            background: linear-gradient(135deg, #333, #444);
+            transform: scale(0.98);
+        }
+
+        .text-editor {
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            border: 2px solid #333;
+            border-radius: 10px;
+            padding: 20px;
+            color: #90EE90;
+            font-size: 20px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .text-editor:focus {
+            border-color: #90EE90;
+            box-shadow: 0 0 20px rgba(144, 238, 144, 0.3);
+        }
+
+        .text-editor::placeholder {
+            color: #555;
+        }
+
+        .reset-icon {
+            font-size: 36px;
+            color: #90EE90;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+            user-select: none;
+            pointer-events: none;
+        }
+
+        /* 모바일 최적화 */
+        @media (max-width: 768px) {
+            .editor-container {
+                padding: 15px;
+            }
+            
+            .text-editor {
+                padding: 15px;
+                font-size: 18px;
+            }
+            
+            .reset-icon {
+                font-size: 30px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .text-editor {
+                font-size: 16px;
+                padding: 12px;
+            }
+            
+            .reset-icon {
+                font-size: 24px;
+            }
+        }
+
+        /* 세로 모드일 때 */
+        @media (orientation: portrait) and (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .editor-container {
+                width: 100%;
+                height: 90%;
+            }
+            
+            .reset-container {
+                width: 100%;
+                height: 10%;
+                border-left: none;
+                border-top: 1px solid #333;
+            }
+        }
+
+        /* 다크 모드 스크롤바 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #111;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #444;
+        }
+
+        /* 선택 영역 스타일 */
+        ::selection {
+            background: rgba(144, 238, 144, 0.3);
+        }
+    </style>
 </head>
+
 <body>
-    <div>Hello world</div>
-    
-  <script src="app.js"></script>
+    <div class="main-container">
+        <!-- 텍스트 에디터 영역 (90%) -->
+        <div class="editor-container">
+            <textarea 
+                class="text-editor" 
+                id="textEditor" 
+                placeholder="여기에 텍스트를 입력하세요..."
+                spellcheck="false"
+            ></textarea>
+        </div>
+
+        <!-- 초기화 버튼 영역 (10%) -->
+        <div class="reset-container" onclick="resetText()" title="초기화">
+            <div class="reset-icon">🗑️</div>
+        </div>
+    </div>
+
+    <script>
+        const textEditor = document.getElementById('textEditor');
+
+        // 텍스트 초기화
+        function resetText() {
+            textEditor.value = '';
+            textEditor.focus();
+            
+            // 간단한 진동 피드백 (지원되는 경우)
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // 페이지 로드 시 에디터에 포커스
+        document.addEventListener('DOMContentLoaded', () => {
+            textEditor.focus();
+        });
+
+        // ESC 키로 초기화
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                resetText();
+            }
+        });
+    </script>
 </body>
 </html>
