@@ -1,0 +1,1319 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>플래시 카드 에디터</title>
+    
+    <!-- PWA 메타 태그 -->
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="플래시 카드">
+    
+    <!-- PWA 매니페스트 -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoi7ZSM656Y7Iqc7Lm07LWcIOyXkOuUlO2EsCIsInNob3J0X25hbWUiOiLtlIzrnpjsiqwiLCJzdGFydF91cmwiOiIuLyIsImRpc3BsYXkiOiJzdGFuZGFsb25lIiwiYmFja2dyb3VuZF9jb2xvciI6IiMwMDAwMDAiLCJ0aGVtZV9jb2xvciI6IiMwMDAwMDAiLCJpY29ucyI6W3sic3JjIjoiZGF0YTppbWFnZS9zdmcreG1sO2Jhc2U2NCxQSE4yWnlCM2FXUjBhRDBpTVRJNElpQm9aV2xuYUhROUlqRXlPQ0lpSUhacFpYZENiM2c5SWpBZ01DQXhNamdnTVRJNElpQm1hV3hzUFNJak1EQXdJaUIyWlhKemFXOXVQU0l4TGpFaUlHbGtQU0pqYkdscWRHRnRjbGt0YVdOdmJpSWdlRzFzYm5NOUltaDBkSEE2THk5M2QzY3Vkek11YjNKbkx6SXdNREF2YzNabklqNEtJQ0E4Y21WamRDQjNhV1IwYUQwaU1USTRMREF3SWlCb1pXbG5hSFE5SWpJMUlpQnllRDBpTXlJZ1ptbHNiRDBpSXpreFJVVTVNQ0l2UGdvZ0lEeDBaWGgwSUhnOUlqWTBJaUI1UFNJeE9DSWdabWxzYkQwaUl6a3dSVVU1TUNJZ2JXRjRMV2RzZVhCb2N6MGdMelE5SWo0Z01EWTFNREF4UEM5MFpYaDBQZ29nSUR4a1pXWnpQZ29nSUNBZ1BFeGJibVZoY2xkcFpIUm9QU0l3TGpjaUlHeGJibVZoY2toMWRXVTlJaTVzSWlCeVBTSTFJaUIzYVdSMGFEMGlNUzR5SWlCb1pXbG5hSFE5SWpFeUlpQm1hV3hzUFNJbE1EQXdJaUIyYVdWM1FtOTRQU0l3SURFZ05TQXlMamt4TlVrL1BpQWpPREU4TDJ4cGJtVmhja2R5WVdScFpXNTBQZ29nSUNBZ1BHeGJibVZoY2xkcFpIUm9QU0l3TGpjaUlHeGJibVZoY2toMWRXVTlJaTV0SWlCeVBTSTFJaUIzYVdSMGFEMGlNUzR5SWlCb1pXbG5hSFE5SWpFeUlpQm1hV3hzUFNJbE1EQXdJaUIyYVdWM1FtOTRQU0l3SURFZ05TQXlMamt4TlVrL1BpQWpOemc0UEM5c2FXNWxZWEpIY21Ga2FXVnVkRDRLSUNBOEwyUmxabk0rQ2lBZ1BIVnpaU0IzYVdSMGFEMGlNVEk0SWlCb1pXbG5hSFE5SWpFeU9DSWdhSEpsWmpBaVl5QWlJaUI0YkdsdWF6cHNhVzVsWVhKSGNtRmthV1Z1ZEMwdE16SWlMejRLUEM5emRtYysaIiwic2l6ZXMiOiIxMjh4MTI4IiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifSx7InNyYyI6ImRhdGE6aW1hZ2Uvc3ZnK3htbDtiYXNlNjQsUEhOMlp5QjNhV1IwYUQwaU5URXlJaUJvWldsbmFIUTlJalV4TWlJZ2RtbGxkMEp2ZUQwaU1DQXdJRFV4TWlBMU1USWlJR1pwYkc5OUlpTXdNREF3TXlJZ2RtVnljMmx2YmowaU1TNHhJaUJwWkQwaVkyeHBhM1JoYlhOc2VTMXBZMjl1SWlCNGJXeHVjejBpYUhSMGNEb3ZMM2QzZHk1M015NXZjbWN2TWpBd01DOXpkbWNpUGdvZ0lEeHlaV04wSUhkcFpIUm9QU0kxTVRJdU1EQXdJaUJvWldsbmFIUTlJakV5TlNJZ2NuZzlJakV1TlNJZ1ptbHNiRDBpSXpreFJVVTVNQ0l2UGdvZ0lEeDBaWGgwSUhnOUlqRXlPQ0lnZVQwaU5USWlJR1pwYkc5OUlpTTVNRVZGT1RBaUlHMWhlQzEwWlhoMExXZHNlWEJvY3owanR6MHNMejQ5SW1sa1BUa2lQaTVzbWQ4eFhEPGRpKHlpdnFoZHVuLaVIYWxhU0Vzai9lVGdvZ0lEeGtaV1p6UGdvZ0lDQWdQSHgwYnlCM2FXUjBhRDBpTUM0M0lpQjNhR3gyWVdSMGFEMGlMaUVpSUhJOUlqVWlJSGRwWkhSb1BTSTJjeUlnYUdWcFoyaDBQU0k0SWlCbWFXeHNQU0lsTURBd0lpQjJhV1YzUW05NFBTSXdJREVnTkNBeElERXBMejRnWm10ZmIzSjBQQ05hYXFCeWJFOWJkSFI2SUc5cmEybFA9IiwIc2l6ZXMiOiI1MTJ4NTEyIiwidHlwZSI6ImltYWdlL3N2Zyt4bWwifV0sImNhdGVnb3JpZXMiOlsicHJvZHVjdGl2aXR5IiwiZWR1Y2F0aW9uIl0sImxhbmdJc28iOiJrbyJ9">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            /* 안드로이드 시스템 폰트 우선 + 영어는 모던 폰트 */
+            font-family: 
+                system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', 'Noto Sans KR', 'Malgun Gothic',
+                'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 
+                'Liberation Mono', Menlo, Courier, sans-serif, monospace;
+            background-color: #000;
+            color: #90EE90;
+            height: 100vh;
+            height: calc(var(--vh, 1vh) * 100); /* 안드로이드 주소창 대응 */
+            overflow: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-touch-callout: none;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            /* 안드로이드 최적화 */
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+        }
+
+        .mobile-header {
+            background: linear-gradient(135deg, #111, #222);
+            border-bottom: 2px solid #333;
+            padding: env(safe-area-inset-top, 10px) 15px 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 60px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .app-title {
+            color: #90EE90;
+            font-size: 18px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .header-btn {
+            background: none;
+            border: 1px solid #555;
+            color: #90EE90;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:active {
+            background-color: #333;
+            transform: scale(0.95);
+        }
+
+        .stats-bar {
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            padding: 8px 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            min-height: 40px;
+        }
+
+        .usage-stats {
+            color: #90EE90;
+        }
+
+        .auto-clear-status {
+            color: #FF6B6B;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .auto-clear-status.active {
+            opacity: 1;
+        }
+
+        .editor-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            background-color: #000;
+        }
+
+        .text-editor {
+            flex: 1;
+            width: 100%;
+            background-color: #000;
+            color: #90EE90;
+            border: none;
+            outline: none;
+            /* 안드로이드 시스템 폰트 우선 + 영어는 모던 폰트 */
+            font-family: 
+                system-ui, -apple-system, BlinkMacSystemFont, 'Roboto', 'Noto Sans KR', 'Malgun Gothic',
+                'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 
+                'Liberation Mono', Menlo, Courier, sans-serif, monospace;
+            font-size: 20px;
+            padding: 20px;
+            resize: none;
+            line-height: 1.5;
+            user-select: text;
+            -webkit-user-select: text;
+            text-align: center;
+        }
+
+        .text-editor::placeholder {
+            color: #666;
+            text-align: center;
+        }
+
+        .bottom-toolbar {
+            background: linear-gradient(135deg, #111, #222);
+            border-top: 2px solid #333;
+            padding: 10px 15px calc(env(safe-area-inset-bottom, 10px) + 10px) 15px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+        }
+
+        .toolbar-btn {
+            background: linear-gradient(135deg, #333, #444);
+            border: 1px solid #555;
+            color: #90EE90;
+            padding: 12px 16px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            min-width: 120px;
+            justify-content: center;
+        }
+
+        .toolbar-btn:active {
+            background: linear-gradient(135deg, #555, #666);
+            transform: scale(0.95);
+        }
+
+        .floating-action-btn {
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom, 20px) + 90px);
+            right: 20px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #333, #444);
+            border: 1px solid #555;
+            border-radius: 50%;
+            color: #90EE90;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .floating-action-btn:active {
+            transform: scale(0.9);
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.8);
+            display: none;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #111, #222);
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            max-width: 90%;
+            min-width: 280px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.7);
+        }
+
+        .modal-title {
+            color: #90EE90;
+            font-size: 18px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px;
+            background-color: #000;
+            color: #90EE90;
+            border: 2px solid #555;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 16px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .modal-input:focus {
+            border-color: #90EE90;
+            outline: none;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .modal-btn {
+            padding: 12px 25px;
+            background: linear-gradient(135deg, #333, #444);
+            color: #90EE90;
+            border: 1px solid #555;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .modal-btn:active {
+            background: linear-gradient(135deg, #555, #666);
+            transform: scale(0.95);
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, #0d4f3c, #0e5d47);
+            border-color: #90EE90;
+        }
+
+        .settings-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background-color: #222;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+
+        .setting-label {
+            color: #90EE90;
+            font-size: 14px;
+        }
+
+        .setting-value {
+            color: #FFD700;
+            font-size: 12px;
+            background-color: #333;
+            padding: 4px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .quick-actions {
+            position: fixed;
+            bottom: calc(env(safe-area-inset-bottom, 20px) + 160px);
+            right: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            opacity: 0;
+            transform: translateX(100px);
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .quick-actions.active {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .quick-action-btn {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #333, #444);
+            border: 1px solid #555;
+            border-radius: 50%;
+            color: #90EE90;
+            font-size: 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .quick-action-btn:active {
+            transform: scale(0.9);
+            background: linear-gradient(135deg, #555, #666);
+        }
+
+        .battery-saver {
+            position: fixed;
+            top: 50px;
+            right: 15px;
+            background: rgba(255, 193, 7, 0.9);
+            color: #000;
+            padding: 8px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: bold;
+            display: none;
+            z-index: 1000;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: #90EE90;
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            display: none;
+            z-index: 1000;
+            border: 1px solid #333;
+        }
+
+        .connection-status.offline {
+            color: #FF6B6B;
+            border-color: #FF6B6B;
+        }
+
+        .android-toast {
+            position: fixed;
+            bottom: 50%;
+            left: 50%;
+            transform: translate(-50%, 50%);
+            background-color: #323232;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 24px;
+            font-size: 14px;
+            z-index: 3000;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        .android-toast.show {
+            opacity: 1;
+        }
+
+        /* 안드로이드 키보드 대응 개선 */
+        @media screen and (max-height: 500px) {
+            .stats-bar {
+                display: none;
+            }
+            .floating-action-btn {
+                bottom: 20px;
+                right: 15px;
+                width: 50px;
+                height: 50px;
+            }
+            .bottom-toolbar {
+                padding: 8px 10px;
+            }
+            .toolbar-btn {
+                padding: 10px 12px;
+                font-size: 12px;
+                min-width: 80px;
+            }
+        }
+
+        /* 머터리얼 디자인 ripple 효과 */
+        .ripple {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ripple::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .ripple:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* 진동 애니메이션 */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body>
+    <!-- 메인 헤더 -->
+    <div class="mobile-header">
+        <div class="app-title">
+            📝 플래시 카드
+        </div>
+        <div class="header-actions">
+            <button class="header-btn" onclick="toggleSettings()" title="설정">⚙️</button>
+        </div>
+    </div>
+
+    <!-- 통계 바 -->
+    <div class="stats-bar">
+        <div class="usage-stats" id="usageStats">
+            <span id="sessionTime">0초</span> | 
+            총 <span id="totalTime">0초</span>
+        </div>
+        <div class="auto-clear-status" id="autoClearStatus">5초 후 자동 초기화</div>
+    </div>
+
+    <!-- 에디터 영역 -->
+    <div class="editor-container">
+        <textarea 
+            class="text-editor" 
+            id="textEditor" 
+            placeholder="여기에 텍스트를 입력하세요..."
+            spellcheck="false"
+        ></textarea>
+    </div>
+
+    <!-- 하단 툴바 -->
+    <div class="bottom-toolbar">
+        <button class="toolbar-btn ripple" onclick="showFontSettings()">
+            🔤 폰트 크기
+        </button>
+        <button class="toolbar-btn ripple" onclick="showTimeSettings()">
+            ⏰ 자동 초기화
+        </button>
+    </div>
+
+    <!-- 플로팅 액션 버튼 -->
+    <button class="floating-action-btn ripple" onclick="toggleQuickActions()" title="빠른 작업">
+        ⚙️
+    </button>
+
+    <!-- 빠른 작업 메뉴 -->
+    <div class="quick-actions" id="quickActions">
+        <button class="quick-action-btn ripple" onclick="resetText()" title="초기화">🗑️</button>
+        <button class="quick-action-btn ripple" onclick="focusEditor()" title="포커스">📝</button>
+        <button class="quick-action-btn ripple" onclick="toggleFullscreen()" title="화면최적화">🔍</button>
+        <button class="quick-action-btn ripple" onclick="quickSettings()" title="빠른설정">⚙️</button>
+    </div>
+
+    <!-- 배터리 절약 모드 표시 -->
+    <div class="battery-saver" id="batterySaver">
+        🔋 배터리 절약 모드
+    </div>
+
+    <!-- 연결 상태 표시 -->
+    <div class="connection-status" id="connectionStatus">
+        🌐 오프라인 모드
+    </div>
+
+    <!-- 안드로이드 토스트 -->
+    <div class="android-toast" id="androidToast"></div>
+
+    <!-- 설정 모달 -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-title">⚙️ 설정</div>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <span class="setting-label">폰트 크기</span>
+                    <span class="setting-value" onclick="showFontSettings()" id="fontSizeDisplay">20px</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">자동 초기화</span>
+                    <span class="setting-value" onclick="showTimeSettings()" id="autoClearDisplay">5초</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">진동 피드백</span>
+                    <span class="setting-value" onclick="toggleVibration()" id="vibrationDisplay">ON</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">스마트 진동</span>
+                    <span class="setting-value" onclick="toggleSmartVibration()" id="smartVibrationDisplay">ON</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">화면 최적화</span>
+                    <span class="setting-value" onclick="toggleFullscreen(); closeSettings();" id="fullscreenDisplay">전환</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">현재 세션</span>
+                    <span class="setting-value" onclick="resetSessionTime()" id="sessionTimeDisplay">초기화</span>
+                </div>
+                <div class="setting-item">
+                    <span class="setting-label">총 사용 시간</span>
+                    <span class="setting-value" onclick="resetTotalTime()" id="totalTimeDisplay">초기화</span>
+                </div>
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn" onclick="closeSettings()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 폰트 크기 모달 -->
+    <div class="modal" id="fontModal">
+        <div class="modal-content">
+            <div class="modal-title">🔤 폰트 크기 설정</div>
+            <div style="color: #90EE90; margin-bottom: 15px; text-align: center;">
+                현재: <span id="currentFontSize">20px</span>
+            </div>
+            <input type="range" 
+                   id="fontSizeSlider" 
+                   min="12" 
+                   max="36" 
+                   value="20" 
+                   style="width: 100%; margin-bottom: 20px;">
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="applyFontSize()">적용</button>
+                <button class="modal-btn" onclick="closeFontModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 자동 초기화 시간 모달 -->
+    <div class="modal" id="timeModal">
+        <div class="modal-content">
+            <div class="modal-title">⏰ 자동 초기화 설정</div>
+            <div style="color: #90EE90; margin-bottom: 15px; text-align: center;">
+                현재: <span id="currentAutoTime">5초</span>
+            </div>
+            <input type="range" 
+                   id="autoTimeSlider" 
+                   min="0" 
+                   max="60" 
+                   step="5" 
+                   value="5" 
+                   style="width: 100%; margin-bottom: 20px;">
+            <div style="color: #FFD700; font-size: 12px; text-align: center; margin-bottom: 15px;">
+                0 = 해제, 5-60초 설정 가능
+            </div>
+            <div class="modal-buttons">
+                <button class="modal-btn primary" onclick="applyAutoTime()">적용</button>
+                <button class="modal-btn" onclick="closeTimeModal()">취소</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PWA 관련 변수
+        let deferredPrompt;
+        let isInstalled = false;
+        let isQuickActionsOpen = false;
+        let isFullscreen = false;
+
+        // 애플리케이션 설정
+        let settings = {
+            fontSize: 20,
+            autoClearTime: 5,
+            vibrationEnabled: true,
+            sessionTime: 0,
+            totalTime: 0,
+            batterySaver: false,
+            smartVibration: true
+        };
+
+        // 상태 변수
+        let isTyping = false;
+        let lastTypingTime = 0;
+        let sessionTimer = null;
+        let autoClearTimer = null;
+        let shakeThreshold = 15;
+        let lastShakeTime = 0;
+
+        // DOM 요소
+        const textEditor = document.getElementById('textEditor');
+        const sessionTimeElement = document.getElementById('sessionTime');
+        const totalTimeElement = document.getElementById('totalTime');
+        const autoClearStatus = document.getElementById('autoClearStatus');
+
+        // 초기화
+        function init() {
+            loadSettings();
+            updateUI();
+            startSessionTimer();
+            initShakeDetection();
+            initPWA();
+            bindEvents();
+            updateUsagePattern();
+            initAndroidFeatures();
+        }
+
+        // 안드로이드 특화 기능 초기화
+        function initAndroidFeatures() {
+            initBackButtonHandler();
+            initKeyboardDetection();
+            initBatteryMonitoring();
+            initConnectionMonitoring();
+            setupAndroidVibration();
+            initFullscreenMode();
+        }
+
+        // 뒤로가기 버튼 처리
+        function initBackButtonHandler() {
+            let modalStack = [];
+            
+            const addToModalStack = (modalId) => {
+                modalStack.push(modalId);
+                history.pushState({ modal: modalId }, '', '');
+            };
+            
+            window.addEventListener('popstate', (e) => {
+                if (modalStack.length > 0) {
+                    const modalId = modalStack.pop();
+                    document.getElementById(modalId).style.display = 'none';
+                } else if (isQuickActionsOpen) {
+                    toggleQuickActions();
+                } else {
+                    if (confirm('앱을 종료하시겠습니까?')) {
+                        window.close();
+                    } else {
+                        history.pushState(null, '', '');
+                    }
+                }
+            });
+            
+            history.pushState(null, '', '');
+            
+            window.originalToggleSettings = toggleSettings;
+            toggleSettings = () => {
+                originalToggleSettings();
+                addToModalStack('settingsModal');
+            };
+        }
+
+        // 키보드 높이 감지
+        function initKeyboardDetection() {
+            const viewport = window.visualViewport;
+            if (viewport) {
+                viewport.addEventListener('resize', () => {
+                    const keyboardHeight = window.innerHeight - viewport.height;
+                    if (keyboardHeight > 100) {
+                        document.body.style.setProperty('--keyboard-height', keyboardHeight + 'px');
+                        document.querySelector('.bottom-toolbar').style.transform = `translateY(-${keyboardHeight}px)`;
+                        document.querySelector('.floating-action-btn').style.transform = `translateY(-${keyboardHeight}px)`;
+                    } else {
+                        document.querySelector('.bottom-toolbar').style.transform = '';
+                        document.querySelector('.floating-action-btn').style.transform = '';
+                    }
+                });
+            }
+        }
+
+        // 배터리 상태 감지
+        function initBatteryMonitoring() {
+            if ('getBattery' in navigator) {
+                navigator.getBattery().then((battery) => {
+                    const updateBatteryStatus = () => {
+                        if (battery.level < 0.2 && !battery.charging) {
+                            settings.batterySaver = true;
+                            document.getElementById('batterySaver').style.display = 'block';
+                            settings.vibrationEnabled = false;
+                        } else if (battery.level > 0.3 || battery.charging) {
+                            settings.batterySaver = false;
+                            document.getElementById('batterySaver').style.display = 'none';
+                            settings.vibrationEnabled = true;
+                        }
+                    };
+                    
+                    battery.addEventListener('levelchange', updateBatteryStatus);
+                    battery.addEventListener('chargingchange', updateBatteryStatus);
+                    updateBatteryStatus();
+                });
+            }
+        }
+
+        // 연결 상태 감지
+        function initConnectionMonitoring() {
+            const updateConnectionStatus = () => {
+                const status = document.getElementById('connectionStatus');
+                if (navigator.onLine) {
+                    status.style.display = 'none';
+                } else {
+                    status.style.display = 'block';
+                    status.className = 'connection-status offline';
+                    status.textContent = '🔴 오프라인 모드';
+                    showAndroidToast('오프라인 상태입니다');
+                }
+            };
+            
+            window.addEventListener('online', updateConnectionStatus);
+            window.addEventListener('offline', updateConnectionStatus);
+            updateConnectionStatus();
+        }
+
+        // 안드로이드 진동 패턴 설정
+        function setupAndroidVibration() {
+            window.androidVibrate = (pattern) => {
+                if (settings.vibrationEnabled && navigator.vibrate) {
+                    if (settings.smartVibration) {
+                        const hour = new Date().getHours();
+                        if (hour >= 22 || hour <= 7) {
+                            if (Array.isArray(pattern)) {
+                                pattern = pattern.map(p => Math.floor(p * 0.5));
+                            } else {
+                                pattern = Math.floor(pattern * 0.5);
+                            }
+                        }
+                    }
+                    navigator.vibrate(pattern);
+                }
+            };
+        }
+
+        // 전체화면 모드 초기화
+        function initFullscreenMode() {
+            document.addEventListener('touchmove', (e) => {
+                if (e.target === document.body) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+            
+            updateViewportHeight();
+            window.addEventListener('resize', updateViewportHeight);
+            window.addEventListener('orientationchange', () => {
+                setTimeout(updateViewportHeight, 500);
+            });
+        }
+
+        // 뷰포트 높이 업데이트
+        function updateViewportHeight() {
+            const vh = window.innerHeight * 0.01;
+            document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        // 전체화면 버튼 상태 업데이트
+        function updateFullscreenButton() {
+            const fullscreenBtn = document.querySelector('.quick-action-btn[onclick="toggleFullscreen()"]');
+            if (fullscreenBtn) {
+                fullscreenBtn.textContent = isFullscreen ? '🔍' : '🔍';
+                fullscreenBtn.title = isFullscreen ? '화면최적화 해제' : '화면최적화';
+            }
+        }
+
+        // PWA 초기화
+        function initPWA() {
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('data:text/javascript;base64,c2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIGV2ZW50LndhaXRVbnRpbChzZWxmLnNraXBXYWl0aW5nKCkpOwp9KTsKCnNlbGYuYWRkRXZlbnRMaXN0ZW5lcignYWN0aXZhdGUnLCBldmVudCA9PiB7CiAgZXZlbnQud2FpdFVudGlsKHNlbGYuY2xpZW50cy5jbGFpbSgpKTsKfSk7Cgpjb25zdCBDQUNIRV9OQU1FID0gJ3RleHQtZWRpdG9yLXYxJzsKY29uc3QgdXJsc1RvQ2FjaGUgPSBbCiAgJy4vJywKICAnLi9pbmRleC5odG1sJwpdOwoKc2VsZi5hZGRFdmVudExpc3RlbmVyKCdpbnN0YWxsJywgZXZlbnQgPT4gewogIGV2ZW50LndhaXRVbnRpbCgKICAgIGNhY2hlcy5vcGVuKENBQ0hFX05BTUUpCiAgICAgIC50aGVuKGNhY2hlID0+IGNhY2hlLmFkZEFsbCh1cmxzVG9DYWNoZSkpCiAgKTsKfSk7CgpzZWxmLmFkZEV2ZW50TGlzdGVuZXIoJ2ZldGNoJywgZXZlbnQgPT4gewogIGV2ZW50LnJlc3BvbmRXaXRoKAogICAgY2FjaGVzLm1hdGNoKGV2ZW50LnJlcXVlc3QpCiAgICAgIC50aGVuKHJlc3BvbnNlID0+IHsKICAgICAgICBpZiAocmVzcG9uc2UpIHsKICAgICAgICAgIHJldHVybiByZXNwb25zZTsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIGZldGNoKGV2ZW50LnJlcXVlc3QpOwogICAgICB9KQogICk7Cn0pOw==')
+                    .then(() => console.log('Service Worker 등록됨'))
+                    .catch(err => console.log('Service Worker 등록 실패', err));
+            }
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+            });
+
+            window.addEventListener('appinstalled', () => {
+                isInstalled = true;
+            });
+        }
+
+        // 설정 로드
+        function loadSettings() {
+            const saved = localStorage.getItem('flashCardSettings');
+            if (saved) {
+                settings = { ...settings, ...JSON.parse(saved) };
+            }
+
+            const today = new Date().toDateString();
+            const totalTimeData = localStorage.getItem('flashCardTotalTime');
+            if (totalTimeData) {
+                const data = JSON.parse(totalTimeData);
+                settings.totalTime = data[today] || 0;
+            }
+        }
+
+        // 설정 저장
+        function saveSettings() {
+            localStorage.setItem('flashCardSettings', JSON.stringify(settings));
+            
+            const today = new Date().toDateString();
+            let totalTimeData = {};
+            const saved = localStorage.getItem('flashCardTotalTime');
+            if (saved) {
+                totalTimeData = JSON.parse(saved);
+            }
+            totalTimeData[today] = settings.totalTime;
+            localStorage.setItem('flashCardTotalTime', JSON.stringify(totalTimeData));
+        }
+
+        // UI 업데이트
+        function updateUI() {
+            textEditor.style.fontSize = settings.fontSize + 'px';
+            updateTimeDisplay();
+            updatePlaceholder();
+            updateSettingsDisplay();
+        }
+
+        // 시간 표시 업데이트
+        function updateTimeDisplay() {
+            sessionTimeElement.textContent = formatTime(settings.sessionTime);
+            totalTimeElement.textContent = formatTime(settings.totalTime);
+            
+            if (isTyping) {
+                sessionTimeElement.textContent += ' ⌨️';
+            }
+        }
+
+        // placeholder 업데이트
+        function updatePlaceholder() {
+            if (settings.autoClearTime > 0) {
+                textEditor.placeholder = `여기에 텍스트를 입력하세요...\n(${settings.autoClearTime}초 후 자동 초기화)`;
+            } else {
+                textEditor.placeholder = '여기에 텍스트를 입력하세요...\n(자동 초기화 해제)';
+            }
+        }
+
+        // 설정 표시 업데이트
+        function updateSettingsDisplay() {
+            document.getElementById('fontSizeDisplay').textContent = settings.fontSize + 'px';
+            document.getElementById('autoClearDisplay').textContent = 
+                settings.autoClearTime === 0 ? '해제' : settings.autoClearTime + '초';
+            document.getElementById('vibrationDisplay').textContent = 
+                settings.vibrationEnabled ? 'ON' : 'OFF';
+            document.getElementById('smartVibrationDisplay').textContent = 
+                settings.smartVibration ? 'ON' : 'OFF';
+            document.getElementById('fullscreenDisplay').textContent = 
+                isFullscreen ? '해제' : '전환';
+        }
+
+        // 시간 포맷팅
+        function formatTime(seconds) {
+            if (seconds < 60) return seconds + '초';
+            if (seconds < 3600) {
+                const minutes = Math.floor(seconds / 60);
+                const remainingSeconds = seconds % 60;
+                return remainingSeconds === 0 ? `${minutes}분` : `${minutes}분 ${remainingSeconds}초`;
+            }
+            const hours = Math.floor(seconds / 3600);
+            const minutes = Math.floor((seconds % 3600) / 60);
+            return minutes === 0 ? `${hours}시간` : `${hours}시간 ${minutes}분`;
+        }
+
+        // 이벤트 바인딩
+        function bindEvents() {
+            textEditor.addEventListener('input', onTextInput);
+            textEditor.addEventListener('focus', onEditorFocus);
+            textEditor.addEventListener('blur', onEditorBlur);
+
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal')) {
+                    closeAllModals();
+                }
+            });
+
+            window.addEventListener('popstate', () => {
+                closeAllModals();
+            });
+
+            document.getElementById('fontSizeSlider').addEventListener('input', (e) => {
+                document.getElementById('currentFontSize').textContent = e.target.value + 'px';
+            });
+            
+            document.getElementById('autoTimeSlider').addEventListener('input', (e) => {
+                const value = parseInt(e.target.value);
+                document.getElementById('currentAutoTime').textContent = 
+                    value === 0 ? '해제' : value + '초';
+            });
+        }
+
+        // 텍스트 입력 시
+        function onTextInput() {
+            startTyping();
+            resetAutoClearTimer();
+        }
+
+        // 에디터 포커스
+        function onEditorFocus() {
+            resetAutoClearTimer();
+        }
+
+        // 에디터 포커스 해제
+        function onEditorBlur() {
+            if (settings.autoClearTime > 0 && textEditor.value.trim()) {
+                startAutoClearTimer();
+            }
+        }
+
+        // 타이핑 시작
+        function startTyping() {
+            if (!isTyping) {
+                isTyping = true;
+                updateTimeDisplay();
+            }
+            lastTypingTime = Date.now();
+        }
+
+        // 타이핑 중단 확인
+        function checkTypingStop() {
+            if (isTyping && Date.now() - lastTypingTime > 1000) {
+                isTyping = false;
+                updateTimeDisplay();
+                if (settings.autoClearTime > 0 && textEditor.value.trim()) {
+                    startAutoClearTimer();
+                }
+            }
+        }
+
+        // 자동 초기화 타이머 시작
+        function startAutoClearTimer() {
+            resetAutoClearTimer();
+            if (settings.autoClearTime > 0) {
+                autoClearStatus.classList.add('active');
+                autoClearTimer = setTimeout(() => {
+                    resetText();
+                    autoClearStatus.classList.remove('active');
+                }, settings.autoClearTime * 1000);
+            }
+        }
+
+        // 자동 초기화 타이머 리셋
+        function resetAutoClearTimer() {
+            if (autoClearTimer) {
+                clearTimeout(autoClearTimer);
+                autoClearTimer = null;
+            }
+            autoClearStatus.classList.remove('active');
+        }
+
+        // 세션 타이머 시작
+        function startSessionTimer() {
+            sessionTimer = setInterval(() => {
+                if (isTyping) {
+                    settings.sessionTime++;
+                    settings.totalTime++;
+                    updateTimeDisplay();
+                    saveSettings();
+                }
+                checkTypingStop();
+            }, 1000);
+        }
+
+        // 흔들기 감지 초기화
+        function initShakeDetection() {
+            if (typeof DeviceMotionEvent !== 'undefined') {
+                if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                    textEditor.addEventListener('touchstart', requestMotionPermission, { once: true });
+                } else {
+                    startShakeDetection();
+                }
+            }
+        }
+
+        // 모션 권한 요청
+        function requestMotionPermission() {
+            if (typeof DeviceMotionEvent.requestPermission === 'function') {
+                DeviceMotionEvent.requestPermission()
+                    .then(permissionState => {
+                        if (permissionState === 'granted') {
+                            startShakeDetection();
+                        }
+                    })
+                    .catch(console.error);
+            }
+        }
+
+        // 흔들기 감지 시작
+        function startShakeDetection() {
+            let lastX = 0, lastY = 0, lastZ = 0;
+            
+            window.addEventListener('devicemotion', (event) => {
+                const acceleration = event.accelerationIncludingGravity;
+                if (!acceleration) return;
+                
+                const { x = 0, y = 0, z = 0 } = acceleration;
+                const deltaX = Math.abs(x - lastX);
+                const deltaY = Math.abs(y - lastY);
+                const deltaZ = Math.abs(z - lastZ);
+                const totalDelta = deltaX + deltaY + deltaZ;
+                
+                if (totalDelta > shakeThreshold && Date.now() - lastShakeTime > 1000) {
+                    onShakeDetected();
+                    lastShakeTime = Date.now();
+                }
+                
+                lastX = x;
+                lastY = y;
+                lastZ = z;
+            });
+        }
+
+        // 흔들기 감지 시 실행 (안드로이드 최적화)
+        function onShakeDetected() {
+            if (textEditor.value.trim()) {
+                if (confirm('텍스트를 초기화하시겠습니까?')) {
+                    resetText();
+                    androidVibrate([200, 100, 200, 100, 200]);
+                    document.body.classList.add('shake');
+                    setTimeout(() => document.body.classList.remove('shake'), 500);
+                    showAndroidToast('흔들어서 초기화되었습니다!');
+                }
+            }
+        }
+
+        // 사용 패턴 업데이트
+        function updateUsagePattern() {
+            const now = new Date();
+            const today = now.toDateString();
+            const hour = now.getHours();
+            
+            let patterns = {};
+            const saved = localStorage.getItem('flashCardUsagePatterns');
+            if (saved) {
+                patterns = JSON.parse(saved);
+            }
+            
+            if (!patterns[today]) {
+                patterns[today] = {};
+            }
+            
+            patterns[today][hour] = (patterns[today][hour] || 0) + 1;
+            localStorage.setItem('flashCardUsagePatterns', JSON.stringify(patterns));
+        }
+
+        // 안드로이드 토스트 메시지
+        function showAndroidToast(message, duration = 3000) {
+            const toast = document.getElementById('androidToast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+
+        // 빠른 작업 메뉴 토글
+        function toggleQuickActions() {
+            isQuickActionsOpen = !isQuickActionsOpen;
+            const quickActions = document.getElementById('quickActions');
+            
+            if (isQuickActionsOpen) {
+                quickActions.classList.add('active');
+                androidVibrate(50);
+            } else {
+                quickActions.classList.remove('active');
+            }
+        }
+
+        // 에디터 포커스 (새 기능)
+        function focusEditor() {
+            textEditor.focus();
+            
+            const length = textEditor.value.length;
+            textEditor.setSelectionRange(length, length);
+            
+            showAndroidToast('에디터에 포커스되었습니다');
+            androidVibrate(50);
+            toggleQuickActions();
+        }
+
+        // 화면 최적화 토글 (전체화면 대신)
+        function toggleFullscreen() {
+            if (!isFullscreen) {
+                isFullscreen = true;
+                window.scrollTo(0, 0);
+                document.body.style.background = '#000';
+                document.querySelector('.mobile-header').style.opacity = '0.95';
+                document.querySelector('.stats-bar').style.opacity = '0.9';
+                
+                showAndroidToast('화면 최적화 모드 (상태바 유지)');
+                androidVibrate([50, 50]);
+            } else {
+                isFullscreen = false;
+                document.querySelector('.mobile-header').style.opacity = '1';
+                document.querySelector('.stats-bar').style.opacity = '1';
+                
+                showAndroidToast('화면 최적화 해제');
+                androidVibrate(50);
+            }
+            
+            updateFullscreenButton();
+            toggleQuickActions();
+        }
+
+        // 빠른 설정 (새 기능)
+        function quickSettings() {
+            const options = [
+                `폰트 크기: ${settings.fontSize}px`,
+                `자동 초기화: ${settings.autoClearTime === 0 ? '해제' : settings.autoClearTime + '초'}`,
+                `진동: ${settings.vibrationEnabled ? 'ON' : 'OFF'}`,
+                '설정 창 열기'
+            ];
+            
+            const choice = prompt('빠른 설정:\n\n1. ' + options.join('\n2. ') + '\n\n번호를 선택하세요 (1-4):');
+            
+            switch(choice) {
+                case '1':
+                    showFontSettings();
+                    break;
+                case '2':
+                    showTimeSettings();
+                    break;
+                case '3':
+                    toggleVibration();
+                    break;
+                case '4':
+                    toggleSettings();
+                    break;
+                default:
+                    showAndroidToast('취소되었습니다');
+            }
+            
+            toggleQuickActions();
+        }
+
+        // 텍스트 초기화 (안드로이드 최적화)
+        function resetText() {
+            textEditor.value = '';
+            textEditor.focus();
+            resetAutoClearTimer();
+            
+            androidVibrate([100, 50, 100]);
+            showAndroidToast('텍스트가 초기화되었습니다');
+            
+            if (isQuickActionsOpen) {
+                toggleQuickActions();
+            }
+        }
+
+        // 설정 토글
+        function toggleSettings() {
+            document.getElementById('settingsModal').style.display = 'flex';
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').style.display = 'none';
+        }
+
+        // 폰트 설정
+        function showFontSettings() {
+            document.getElementById('fontSizeSlider').value = settings.fontSize;
+            document.getElementById('currentFontSize').textContent = settings.fontSize + 'px';
+            document.getElementById('fontModal').style.display = 'flex';
+            closeSettings();
+        }
+
+        function applyFontSize() {
+            settings.fontSize = parseInt(document.getElementById('fontSizeSlider').value);
+            updateUI();
+            saveSettings();
+            closeFontModal();
+        }
+
+        function closeFontModal() {
+            document.getElementById('fontModal').style.display = 'none';
+        }
+
+        // 시간 설정
+        function showTimeSettings() {
+            document.getElementById('autoTimeSlider').value = settings.autoClearTime;
+            document.getElementById('currentAutoTime').textContent = 
+                settings.autoClearTime === 0 ? '해제' : settings.autoClearTime + '초';
+            document.getElementById('timeModal').style.display = 'flex';
+            closeSettings();
+        }
+
+        function applyAutoTime() {
+            settings.autoClearTime = parseInt(document.getElementById('autoTimeSlider').value);
+            updateUI();
+            saveSettings();
+            closeTimeModal();
+        }
+
+        function closeTimeModal() {
+            document.getElementById('timeModal').style.display = 'none';
+        }
+
+        // 진동 토글 (안드로이드 최적화)
+        function toggleVibration() {
+            settings.vibrationEnabled = !settings.vibrationEnabled;
+            updateSettingsDisplay();
+            saveSettings();
+            
+            if (settings.vibrationEnabled) {
+                androidVibrate([50, 50, 50]);
+                showAndroidToast('진동이 활성화되었습니다');
+            } else {
+                showAndroidToast('진동이 비활성화되었습니다');
+            }
+        }
+
+        // 스마트 진동 토글
+        function toggleSmartVibration() {
+            settings.smartVibration = !settings.smartVibration;
+            updateSettingsDisplay();
+            saveSettings();
+            
+            if (settings.smartVibration) {
+                showAndroidToast('스마트 진동이 활성화되었습니다\n(야간에 진동 강도 자동 조절)');
+                androidVibrate([30, 30, 100, 30, 30]);
+            } else {
+                showAndroidToast('스마트 진동이 비활성화되었습니다');
+                androidVibrate(100);
+            }
+        }
+
+        // 시간 초기화
+        function resetSessionTime() {
+            const currentTotal = settings.totalTime - settings.sessionTime;
+            settings.totalTime = currentTotal + settings.sessionTime;
+            settings.sessionTime = 0;
+            updateTimeDisplay();
+            saveSettings();
+            closeSettings();
+        }
+
+        function resetTotalTime() {
+            settings.totalTime = 0;
+            settings.sessionTime = 0;
+            updateTimeDisplay();
+            saveSettings();
+            closeSettings();
+        }
+
+        // 모든 모달 닫기
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.style.display = 'none';
+            });
+        }
+
+        // 페이지 언로드 시 데이터 저장
+        window.addEventListener('beforeunload', () => {
+            saveSettings();
+        });
+
+        // 키보드 이벤트
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeAllModals();
+            }
+        });
+
+        // 앱 초기화
+        init();
+    </script>
+</body>
+</html>
