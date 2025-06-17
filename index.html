@@ -31,7 +31,6 @@
             background-color: #000;
             color: #90EE90;
             height: 100vh;
-            height: calc(var(--vh, 1vh) * 100); /* 안드로이드 주소창 대응 */
             overflow: hidden;
             user-select: none;
             -webkit-user-select: none;
@@ -50,7 +49,7 @@
         .mobile-header {
             background: linear-gradient(135deg, #111, #222);
             border-bottom: 2px solid #333;
-            padding: env(safe-area-inset-top, 10px) 15px 10px 15px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -153,7 +152,7 @@
         .bottom-toolbar {
             background: linear-gradient(135deg, #111, #222);
             border-top: 2px solid #333;
-            padding: 10px 15px calc(env(safe-area-inset-bottom, 10px) + 10px) 15px;
+            padding: 15px;
             display: flex;
             justify-content: space-around;
             align-items: center;
@@ -184,7 +183,7 @@
 
         .floating-action-btn {
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom, 20px) + 90px);
+            bottom: 110px;
             right: 20px;
             width: 60px;
             height: 60px;
@@ -318,7 +317,7 @@
 
         .quick-actions {
             position: fixed;
-            bottom: calc(env(safe-area-inset-bottom, 20px) + 160px);
+            bottom: 180px;
             right: 20px;
             display: flex;
             flex-direction: column;
@@ -710,7 +709,6 @@
                 viewport.addEventListener('resize', () => {
                     const keyboardHeight = window.innerHeight - viewport.height;
                     if (keyboardHeight > 100) {
-                        document.body.style.setProperty('--keyboard-height', keyboardHeight + 'px');
                         document.querySelector('.bottom-toolbar').style.transform = `translateY(-${keyboardHeight}px)`;
                         document.querySelector('.floating-action-btn').style.transform = `translateY(-${keyboardHeight}px)`;
                     } else {
@@ -789,18 +787,6 @@
                     e.preventDefault();
                 }
             }, { passive: false });
-            
-            updateViewportHeight();
-            window.addEventListener('resize', updateViewportHeight);
-            window.addEventListener('orientationchange', () => {
-                setTimeout(updateViewportHeight, 500);
-            });
-        }
-
-        // 뷰포트 높이 업데이트
-        function updateViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
         }
 
         // 전체화면 버튼 상태 업데이트
