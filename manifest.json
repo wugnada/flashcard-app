@@ -1,1 +1,36 @@
-{"name":"플래시 카드 에디터","short_name":"플래시카드","start_url":"./","display":"standalone","background_color":"#000","theme_color":"#000","icons":[{"src":"icons/icon-192.png","sizes":"192x192","type":"image/png"},{"src":"icons/icon-512.png","sizes":"512x512","type":"image/png"}]}
+{
+  "name": "텍스트 연습 - 안드로이드 앱",
+  "short_name": "텍스트연습",
+  "description": "안드로이드용 타이핑 연습 PWA 앱",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "orientation": "portrait",
+  "categories": ["productivity", "education"],
+  "lang": "ko",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./icon-512.png", 
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "새 연습 시작",
+      "short_name": "새 연습",
+      "description": "텍스트 에디터를 초기화하고 새 연습을 시작합니다",
+      "url": "./?action=new",
+      "icons": [{ "src": "./icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}
