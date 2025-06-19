@@ -1,22 +1,41 @@
 {
   "name": "CMD 스타일 텍스트 에디터",
   "short_name": "텍스트에디터",
-  "description": "안드로이드용 CMD 스타일 텍스트 연습 앱",
+  "description": "CMD 스타일 텍스트 연습 앱 - 가로/세로 모드 지원",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
-  "orientation": "portrait",
+  "orientation": "any",
+  "categories": ["productivity", "education"],
+  "lang": "ko",
+  "scope": "./",
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' fill='%23000'/><text x='96' y='110' text-anchor='middle' fill='%2390EE90' font-size='80' font-family='monospace'>📝</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 192 192\"><rect width=\"192\" height=\"192\" fill=\"%23000\"/><text x=\"96\" y=\"110\" text-anchor=\"middle\" fill=\"%2390EE90\" font-size=\"80\" font-family=\"monospace\">📝</text></svg>",
       "sizes": "192x192",
-      "type": "image/svg+xml"
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' fill='%23000'/><text x='256' y='300' text-anchor='middle' fill='%2390EE90' font-size='200' font-family='monospace'>📝</text></svg>",
-      "sizes": "512x512", 
-      "type": "image/svg+xml"
+      "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 512 512\"><rect width=\"512\" height=\"512\" fill=\"%23000\"/><text x=\"256\" y=\"300\" text-anchor=\"middle\" fill=\"%2390EE90\" font-size=\"200\" font-family=\"monospace\">📝</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 1280 800\"><rect width=\"1280\" height=\"800\" fill=\"%23000\"/><text x=\"640\" y=\"400\" text-anchor=\"middle\" fill=\"%2390EE90\" font-size=\"100\" font-family=\"monospace\">CMD Text Editor</text></svg>",
+      "sizes": "1280x800",
+      "type": "image/svg+xml",
+      "form_factor": "wide"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 750 1334\"><rect width=\"750\" height=\"1334\" fill=\"%23000\"/><text x=\"375\" y=\"667\" text-anchor=\"middle\" fill=\"%2390EE90\" font-size=\"80\" font-family=\"monospace\">텍스트 에디터</text></svg>",
+      "sizes": "750x1334",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
     }
   ]
 }
